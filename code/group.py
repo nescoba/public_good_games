@@ -2,7 +2,7 @@ import random
 from individual import *
 class Group:
 
-    def __init__(self. initial_population):
+    def __init__(self, initial_population):
         self.population = initial_population
         self.size = 0
         self.num_of_coops = 0
