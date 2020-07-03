@@ -50,7 +50,11 @@ class World:
         chosen_group.add_member(new_individual)
 
     def make_transition(self):
-        list_of_rates = [self.birth_rate_coops(group) * group.num_of_coops  + self.birth_rate_defs(group) * group.num_of_defs + self.second_level_rate(group) for group in self.groups]
+        list_of_rates = [
+            self.birth_rate_coops(group) * group.num_of_coops
+            + self.birth_rate_defs(group) * group.num_of_defs
+            + self.second_level_rate(group) for group in self.groups
+        ]
 
         global_rate = sum(list_of_rates)
 
@@ -61,7 +65,11 @@ class World:
 
 
 
-        group_list_of_rates = [self.birth_rate_coops(chosen_group) * chosen_group.num_of_coops, self.birth_rate_defs(chosen_group) * chosen_group.num_of_defs, self.second_level_rate(chosen_group)]
+        group_list_of_rates = [
+            self.birth_rate_coops(chosen_group) * chosen_group.num_of_coops,
+            self.birth_rate_defs(chosen_group) * chosen_group.num_of_defs,
+            self.second_level_rate(chosen_group)
+        ]
 
         chosen_event = random.choices(['coop', 'def', 'second_level'], group_list_of_rates)[0]
 
