@@ -12,6 +12,8 @@ class World:
         self.B = 1
         self.R = 1
         self.C = 1
+        self.eta = 0.01
+        self.mu = 0.01
 
     def payoff_coops(self, group):
         payoff =  self.B * group.num_of_coops / group.size   # This depends on the model
@@ -35,8 +37,21 @@ class World:
 
     def create_new_individual(self, group, level_of_coop):
         group.kill_random_member()
+
+        there_is_mutation = random.choices([1,0], [self.eta, 1-self.eta])[0]
+        if there_is_mutation:
+            level_of_coop = 1-level_of_coop
+
         new_individual = Individual(level_of_coop)
-        group.add_member(new_individual)
+
+        there_is_migration = random.choices([1,0], [self.mu, 1-self.mu])[0]
+        if there_is_migration:
+            new_group = random.choice(self.groups)
+            while new_group == group:
+                new_group = random.choice(self.groups)
+                new_group.add_member(new_individual)
+        else:
+            group.add_member(new_individual)
 
     def execute_group_level_dynamic(self, chosen_group):
         copy_of_groups = self.groups.copy()
