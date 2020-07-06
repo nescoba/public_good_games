@@ -1,26 +1,31 @@
 import random
 from group import *
 from individual import *
+import pdb
 
 class World:
 
-    def __init__(self, initial_groups):
+    def __init__(self, initial_groups, W = 1, B = 1, R = 1, C = 1, eta = 0.01, mu = 0.01):
         self.groups = initial_groups
         self.waiting_times = []
 
-        self.W = 1
-        self.B = 1
-        self.R = 1
-        self.C = 1
-        self.eta = 0.01
-        self.mu = 0.01
+        self.W = W
+        self.B = B
+        self.R = R
+        self.C = C
+        self.eta = eta
+        self.mu = mu
 
     def payoff_coops(self, group):
-        payoff =  self.B * group.num_of_coops / group.size   # This depends on the model
+        payoff = 0
+        if group.size != 0:
+            payoff = min(1,self.B / group.size)  * group.num_of_coops    # This depends on the model
         return payoff
 
     def payoff_defs(self, group):
-        payoff = 1 + self.B * group.num_of_coops / group.size  # This depends on the model
+        payoff = 0
+        if group.size != 0:
+            payoff = 1 + min(1,self.B / group.size)  * group.num_of_coops  # This depends on the model
         return payoff
 
     def birth_rate_coops(self, group):
@@ -32,7 +37,15 @@ class World:
         return rate
 
     def second_level_rate(self, group):
-        rate = self.W * ( 1 + self.R * group.num_of_coops / group.size)    # This depends on the model
+        rate = 0
+        list_of_non_empty_groups = []
+        for internal_group in self.groups:
+            if internal_group.size > 0:
+                list_of_non_empty_groups.append(1)
+        num_of_non_empty_groups = sum(list_of_non_empty_groups)
+        condition = (group.size != 0) and (num_of_non_empty_groups > 1)
+        if condition:
+            rate = self.W * ( 1 + self.R * group.num_of_coops / group.size)    # This depends on the model
         return rate
 
     def create_new_individual(self, group, level_of_coop):
@@ -49,7 +62,7 @@ class World:
             new_group = random.choice(self.groups)
             while new_group == group:
                 new_group = random.choice(self.groups)
-                new_group.add_member(new_individual)
+            new_group.add_member(new_individual)
         else:
             group.add_member(new_individual)
 
@@ -65,9 +78,14 @@ class World:
         chosen_group.add_member(new_individual)
 
     def make_transition(self):
+
+        #pdb.set_trace()
+
         list_of_rates = [self.birth_rate_coops(group) * group.num_of_coops  + self.birth_rate_defs(group) * group.num_of_defs + self.second_level_rate(group) for group in self.groups]
 
         global_rate = sum(list_of_rates)
+
+        #pdb.set_trace()
 
         waiting_time_until_new_event = random.expovariate(global_rate)
         self.waiting_times.append(waiting_time_until_new_event)
