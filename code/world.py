@@ -82,10 +82,8 @@ class World:
         return second_chosen_group
 
     def execute_group_level_dynamic(self, chosen_group):
-        copy_of_groups = self.groups.copy()
-        copy_of_groups.remove(chosen_group)
-        list_of_sizes = [group.size for group in copy_of_groups]
-        second_chosen_group = random.choices(copy_of_groups, list_of_sizes)[0]
+
+        second_chosen_group = self.select_different_group(chosen_group)
         second_chosen_group.kill_random_member()
 
         chosen_level_of_coop = random.choices([1,0], [chosen_group.num_of_coops , chosen_group.num_of_defs ])[0]
