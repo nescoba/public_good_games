@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 M = 10
 n = 100
-STEPS = 2000
+STEPS = 10000
 
 
 initial_groups = []
@@ -22,7 +22,7 @@ for m in range(M):
 
     initial_groups.append(group)
 
-world = World(initial_groups, eta = 0.006, mu = 0.006, B = 10)
+world = World(initial_groups, eta = 0.006, mu = 0.006, B = 10, W = 10000)
 
 avg_contr_series = []
 group_population_series = []

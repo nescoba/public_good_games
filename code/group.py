@@ -23,3 +23,21 @@ class Group:
         random_position = random.randint(0,self.size-1)
         del self.population[random_position]
         self.update()
+
+    def kill_random_defector(self):
+        random_position = random.randint(0,self.size-1)
+        random_member = self.population[random_position]
+        while random_member.coop_level != 0:
+            random_position = random.randint(0,self.size-1)
+            random_member = self.population[random_position]
+        del self.population[random_position]
+        self.update()
+
+    def kill_random_cooperator(self):
+        random_position = random.randint(0,self.size-1)
+        random_member = self.population[random_position]
+        while random_member.coop_level != 1:
+            random_position = random.randint(0,self.size-1)
+            random_member = self.population[random_position]
+        del self.population[random_position]
+        self.update()
