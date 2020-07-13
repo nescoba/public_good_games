@@ -2,11 +2,12 @@ import random
 from individual import *
 class Group:
 
-    def __init__(self, initial_population):
+    def __init__(self, initial_population, id):
         self.population = initial_population
         self.size = 0
         self.num_of_coops = 0
         self.num_of_defs = 0
+        self.id = id
         self.update()
 
     def update(self):

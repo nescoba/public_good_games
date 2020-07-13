@@ -16,6 +16,8 @@ class World:
         self.eta = eta
         self.mu = mu
 
+        self.population_size = sum([group.size for group in self.groups])
+
     def payoff_coops(self, group):
         payoff = 0
         if group.size != 0:
@@ -81,16 +83,31 @@ class World:
         second_chosen_group = random.choices(copy_of_groups, list_of_sizes)[0]
         return second_chosen_group
 
-    def execute_group_level_dynamic(self, chosen_group):
-        copy_of_groups = self.groups.copy()
-        copy_of_groups.remove(chosen_group)
-        list_of_sizes = [group.size for group in copy_of_groups]
-        second_chosen_group = random.choices(copy_of_groups, list_of_sizes)[0]
-        second_chosen_group.kill_random_member()
+    def execute_group_level_dynamic(self):
 
-        chosen_level_of_coop = random.choices([1,0], [chosen_group.num_of_coops , chosen_group.num_of_defs ])[0]
-        new_individual = Individual(chosen_level_of_coop)
-        chosen_group.add_member(new_individual)
+        list_of_rates = [self.birth_rate_coops(group) * group.num_of_coops  + self.birth_rate_defs(group) * group.num_of_defs + self.migration_rate_coops(group) * group.num_of_coops + self.migration_rate_coops(group) * group.num_of_coops for group in self.groups]
+
+        new_groups = [Group([], group.id) for group in self.groups]
+
+        for i in range(self.population_size):
+            chosen_group = random.choices(self.groups, list_of_rates)[0]
+
+            group_list_of_rates = [self.birth_rate_coops(chosen_group) * chosen_group.num_of_coops, self.birth_rate_defs(chosen_group) * chosen_group.num_of_defs]
+
+            chosen_level_of_cooperation = random.choices([1, 0], group_list_of_rates)[0]
+
+            new_individual = Individual(chosen_level_of_cooperation)
+
+            i = 0
+            new_group = new_groups[0]
+            while new_group.id != chosen_group.id:
+                i += 1
+                new_group = new_groups[i]
+
+            new_group.add_member(new_individual)
+
+        self.groups = new_groups
+
 
     def migrate_cooperator(self, chosen_group):
         second_chosen_group = self.select_different_group(chosen_group)
@@ -112,28 +129,32 @@ class World:
 
         #pdb.set_trace()
 
-        list_of_rates = [self.birth_rate_coops(group) * group.num_of_coops  + self.birth_rate_defs(group) * group.num_of_defs + self.second_level_rate(group) + self.migration_rate_coops(group) * group.num_of_coops + self.migration_rate_coops(group) * group.num_of_coops for group in self.groups]
+        list_of_rates = [self.birth_rate_coops(group) * group.num_of_coops  + self.birth_rate_defs(group) * group.num_of_defs + self.migration_rate_coops(group) * group.num_of_coops + self.migration_rate_coops(group) * group.num_of_coops for group in self.groups]
 
-        global_rate = sum(list_of_rates)
+        global_rate = sum(list_of_rates) + self.W
 
         #pdb.set_trace()
 
         waiting_time_until_new_event = random.expovariate(global_rate)
         self.waiting_times.append(waiting_time_until_new_event)
 
-        chosen_group = random.choices(self.groups, list_of_rates)[0]
+        event_level = random.choices([1,2], [sum(list_of_rates). self.W])[0]
 
-        group_list_of_rates = [self.birth_rate_coops(chosen_group) * chosen_group.num_of_coops, self.birth_rate_defs(chosen_group) * chosen_group.num_of_defs, self.second_level_rate(chosen_group), self.migration_rate_coops(chosen_group) * chosen_group.num_of_coops, self.migration_rate_defs * chosen_group.num_of_defs]
+        if event_level == 2:
+            self.execute_group_level_dynamic()
 
-        chosen_event = random.choices(['coop', 'def', 'second_level', 'migr_coop', 'migr_def'], group_list_of_rates)[0]
+        else:
+            chosen_group = random.choices(self.groups, list_of_rates)[0]
 
-        if chosen_event == 'coop':
-            self.create_new_individual(chosen_group, 1)
-        elif chosen_event == 'def':
-            self.create_new_individual(chosen_group, 0)
-        elif chosen_event == 'second_level':
-            self.execute_group_level_dynamic(chosen_group)
-        elif chosen_event == 'migr_coop':
-            self.migrate_cooperator(chosen_group)
-        elif chosen_event == 'migr_def':
-            self.migrate_defector(chosen_group)
+            group_list_of_rates = [self.birth_rate_coops(chosen_group) * chosen_group.num_of_coops, self.birth_rate_defs(chosen_group) * chosen_group.num_of_defs, self.migration_rate_coops(chosen_group) * chosen_group.num_of_coops, self.migration_rate_defs * chosen_group.num_of_defs]
+
+            chosen_event = random.choices(['coop', 'def', 'migr_coop', 'migr_def'], group_list_of_rates)[0]
+
+            if chosen_event == 'coop':
+                self.create_new_individual(chosen_group, 1)
+            elif chosen_event == 'def':
+                self.create_new_individual(chosen_group, 0)
+            elif chosen_event == 'migr_coop':
+                self.migrate_cooperator(chosen_group)
+            elif chosen_event == 'migr_def':
+                self.migrate_defector(chosen_group)
