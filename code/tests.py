@@ -28,7 +28,7 @@ if flag:
 single_individual = Individual(1)
 initial_group_1 = Group([single_individual])
 initial_group_2 = Group([])
-world = World([initial_group_1, initial_group_2], eta = 0, mu = 1)
+world = World([initial_group_1, initial_group_2], eta = 0, mu = 10000, W=0)
 flag = True
 i = 0
 while flag and i < 100:

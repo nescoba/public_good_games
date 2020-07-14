@@ -74,6 +74,8 @@ class World:
         # else:
             # group.add_member(new_individual)
 #
+        group.add_member(new_individual)
+
     def select_different_group(self, chosen_group):
         copy_of_groups = self.groups.copy()
         copy_of_groups.remove(chosen_group)
@@ -91,19 +93,19 @@ class World:
         chosen_group.add_member(new_individual)
 
     def migrate_cooperator(self, chosen_group):
-        second_chosen_group = self.select_different_group(chosen_group)
-        second_chosen_group.kill_random_cooperator()
+        chosen_group.kill_random_cooperator()
 
         new_individual = Individual(1)
-        chosen_group.add_member(new_individual)
+        second_chosen_group = self.select_different_group(chosen_group)
+        second_chosen_group.add_member(new_individual)
 
 
     def migrate_defector(self, chosen_group):
-        second_chosen_group = self.select_different_group(chosen_group)
-        second_chosen_group.kill_random_defector()
+        chosen_group.kill_random_cooperator()
 
         new_individual = Individual(0)
-        chosen_group.add_member(new_individual)
+        second_chosen_group = self.select_different_group(chosen_group)
+        second_chosen_group.add_member(new_individual)
 
 
     def make_transition(self):
@@ -121,7 +123,7 @@ class World:
 
         chosen_group = random.choices(self.groups, list_of_rates)[0]
 
-        group_list_of_rates = [self.birth_rate_coops(chosen_group) * chosen_group.num_of_coops, self.birth_rate_defs(chosen_group) * chosen_group.num_of_defs, self.second_level_rate(chosen_group), self.migration_rate_coops(chosen_group) * chosen_group.num_of_coops, self.migration_rate_defs * chosen_group.num_of_defs]
+        group_list_of_rates = [self.birth_rate_coops(chosen_group) * chosen_group.num_of_coops, self.birth_rate_defs(chosen_group) * chosen_group.num_of_defs, self.second_level_rate(chosen_group), self.migration_rate_coops(chosen_group) * chosen_group.num_of_coops, self.migration_rate_defs(chosen_group) * chosen_group.num_of_defs]
 
         chosen_event = random.choices(['coop', 'def', 'second_level', 'migr_coop', 'migr_def'], group_list_of_rates)[0]
 
