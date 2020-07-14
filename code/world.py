@@ -120,7 +120,7 @@ class World:
 
 
     def migrate_defector(self, chosen_group):
-        chosen_group.kill_random_cooperator()
+        chosen_group.kill_random_defector()
 
         new_individual = Individual(0)
         second_chosen_group = self.select_different_group(chosen_group)
