@@ -52,24 +52,3 @@ coops = world.groups[0].num_of_coops
 defs = world.groups[0].num_of_defs
 
 print(f'There are {coops} cooperators and {defs} defectors')
-
-
-# Test 3
-single_individual = Individual(1)
-initial_group_1 = Group([single_individual], 0)
-initial_group_2 = Group([], 1)
-world = World([initial_group_1, initial_group_2], eta = 0, mu = 1000000)
-flag = True
-i = 0
-while flag and i < 100:
-    #pdb.set_trace()
-    world.make_transition()
-    size_1 = world.groups[0].size
-    size_2 = world.groups[1].size
-    if (i%2 == 0 and size_1 != 0) or (i%2 == 1 and size_2 != 0):
-        flag = False
-        print('test 2 failed')
-    i += 1
-#
-if flag:
-    print('test 2 passed')
