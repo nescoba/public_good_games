@@ -5,9 +5,9 @@ import random
 import numpy as np
 import matplotlib.pyplot as plt
 
-M = 10
+M = 2
 n = 100
-TIME = 1
+TIME = 3
 
 
 initial_groups = []
@@ -22,7 +22,7 @@ for m in range(M):
 
     initial_groups.append(group)
 
-world = World(initial_groups, eta = 0.006, mu = 0.006, B = 10, W = 100)
+world = World(initial_groups, eta = 0.006, mu = 0.006, B = 100, W = 100)
 
 avg_contr_series = []
 group_population_series = []

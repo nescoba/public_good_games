@@ -87,7 +87,7 @@ class World:
 
     def execute_group_level_dynamic(self):
 
-        list_of_rates = [self.birth_rate_coops(group) * group.num_of_coops  + self.birth_rate_defs(group) * group.num_of_defs + self.migration_rate_coops(group) * group.num_of_coops + self.migration_rate_coops(group) * group.num_of_coops for group in self.groups]
+        list_of_rates = [self.birth_rate_coops(group) * group.num_of_coops  + self.birth_rate_defs(group) * group.num_of_defs for group in self.groups]
 
         new_groups = [Group([], group.id) for group in self.groups]
 
@@ -100,11 +100,11 @@ class World:
 
             new_individual = Individual(chosen_level_of_cooperation)
 
-            i = 0
+            j = 0
             new_group = new_groups[0]
             while new_group.id != chosen_group.id:
-                i += 1
-                new_group = new_groups[i]
+                j += 1
+                new_group = new_groups[j]
 
             new_group.add_member(new_individual)
 
