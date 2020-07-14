@@ -13,6 +13,7 @@ flag = True
 i = 0
 while flag and i < 100:
     world.make_transition()
+    #pdb.set_trace()
     group = world.groups[0]
     population = group.size
     if population != 1:
@@ -49,7 +50,7 @@ if flag:
 # Test 3
 single_individual =  Individual(1)
 initial_group = Group([single_individual],0)
-world = World([initial_group], eta = 1, mu = 0)
+world = World([initial_group], eta = 1, mu = 0, W = 0)
 flag = True
 i = 0
 while flag and i < 100 :

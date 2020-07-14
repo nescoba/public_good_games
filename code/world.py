@@ -61,7 +61,7 @@ class World:
     def create_new_individual(self, group, level_of_coop):
         group.kill_random_member()
 
-        there_is_mutation = random.choices([1,0], [self.eta, 1-self.eta])[0]
+        there_is_mutation = random.choices([True,False], [self.eta, 1-self.eta])[0]
         if there_is_mutation:
             level_of_coop = 1-level_of_coop
 
@@ -75,7 +75,9 @@ class World:
             # new_group.add_member(new_individual)
         # else:
             # group.add_member(new_individual)
-#
+
+        group.add_member(new_individual)
+
     def select_different_group(self, chosen_group):
         copy_of_groups = self.groups.copy()
         copy_of_groups.remove(chosen_group)
@@ -139,6 +141,8 @@ class World:
         self.waiting_times.append(waiting_time_until_new_event)
 
         event_level = random.choices([1,2], [sum(list_of_rates), self.W])[0]
+
+        #pdb.set_trace()
 
         if event_level == 2:
             self.execute_group_level_dynamic()
