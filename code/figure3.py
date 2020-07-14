@@ -9,7 +9,7 @@ import pdb
 
 M = 10
 n = 100
-STEPS = 100
+TIME = 1
 RUNS = 10
 GRANULARITY = 50
 
@@ -36,8 +36,15 @@ for run in range(RUNS):
     for i in range(GRANULARITY):
         migration = 0.05*i/50
         world = World(initial_groups, B = 10, eta = 0, mu = migration)
-        for j in range(STEPS):
+
+        time = 0
+        num_of_transitions = 0
+        while time < TIME:
             world.make_transition()
+            time += world.waiting_times[num_of_transitions]
+            num_of_transitions +=1
+            #print(time)
+
         total_population = sum([group.size for group in world.groups])
         total_cooperators = sum([group.num_of_coops for group in world.groups])
         run_series.append(total_cooperators/total_population)
@@ -63,8 +70,15 @@ for run in range(RUNS):
     for i in range(GRANULARITY):
         migration = 0.05*i/50
         world = World(initial_groups, B = 10, eta = 0.006, mu = migration)
-        for j in range(STEPS):
+
+        time = 0
+        num_of_transitions = 0
+        while time < TIME:
             world.make_transition()
+            time += world.waiting_times[num_of_transitions]
+            num_of_transitions +=1
+            #print(time)
+
         total_population = sum([group.size for group in world.groups])
         total_cooperators = sum([group.num_of_coops for group in world.groups])
         run_series.append(total_cooperators/total_population)

@@ -101,7 +101,7 @@ class World:
 
 
     def migrate_defector(self, chosen_group):
-        chosen_group.kill_random_cooperator()
+        chosen_group.kill_random_defector()
 
         new_individual = Individual(0)
         second_chosen_group = self.select_different_group(chosen_group)
@@ -126,6 +126,8 @@ class World:
         group_list_of_rates = [self.birth_rate_coops(chosen_group) * chosen_group.num_of_coops, self.birth_rate_defs(chosen_group) * chosen_group.num_of_defs, self.second_level_rate(chosen_group), self.migration_rate_coops(chosen_group) * chosen_group.num_of_coops, self.migration_rate_defs(chosen_group) * chosen_group.num_of_defs]
 
         chosen_event = random.choices(['coop', 'def', 'second_level', 'migr_coop', 'migr_def'], group_list_of_rates)[0]
+
+        #print(chosen_event)
 
         if chosen_event == 'coop':
             self.create_new_individual(chosen_group, 1)
