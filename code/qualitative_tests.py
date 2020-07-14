@@ -19,7 +19,7 @@ for i in range(n):
     def_individual = Individual(0)
     group_defs.add_member(def_individual)
 
-world = World([group_coops, group_defs], eta = 0, mu = 0, W = 2 )
+world = World([group_coops, group_defs], eta = 0, mu = 0, W = 100 )
 
 for step in range(steps):
     world.make_transition()
@@ -40,8 +40,9 @@ for i in range(n):
     coop_individual = Individual(1)
     group.add_member(coop_individual)
 
-def_individual = Individual(0)
-group.add_member(def_individual)
+for i in range(n//3):
+    selfish_individual = Individual(0)
+    group.add_member(selfish_individual)
 
 world = World([group], eta = 0, mu = 0)
 for step in range(steps):

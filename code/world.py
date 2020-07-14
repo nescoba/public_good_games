@@ -112,19 +112,19 @@ class World:
 
 
     def migrate_cooperator(self, chosen_group):
-        second_chosen_group = self.select_different_group(chosen_group)
-        second_chosen_group.kill_random_cooperator()
+        chosen_group.kill_random_cooperator()
 
         new_individual = Individual(1)
-        chosen_group.add_member(new_individual)
+        second_chosen_group = self.select_different_group(chosen_group)
+        second_chosen_group.add_member(new_individual)
 
 
     def migrate_defector(self, chosen_group):
-        second_chosen_group = self.select_different_group(chosen_group)
-        second_chosen_group.kill_random_defector()
+        chosen_group.kill_random_cooperator()
 
         new_individual = Individual(0)
-        chosen_group.add_member(new_individual)
+        second_chosen_group = self.select_different_group(chosen_group)
+        second_chosen_group.add_member(new_individual)
 
 
     def make_transition(self):
