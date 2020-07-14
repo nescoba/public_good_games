@@ -138,7 +138,7 @@ class World:
         waiting_time_until_new_event = random.expovariate(global_rate)
         self.waiting_times.append(waiting_time_until_new_event)
 
-        event_level = random.choices([1,2], [sum(list_of_rates). self.W])[0]
+        event_level = random.choices([1,2], [sum(list_of_rates), self.W])[0]
 
         if event_level == 2:
             self.execute_group_level_dynamic()
@@ -146,7 +146,7 @@ class World:
         else:
             chosen_group = random.choices(self.groups, list_of_rates)[0]
 
-            group_list_of_rates = [self.birth_rate_coops(chosen_group) * chosen_group.num_of_coops, self.birth_rate_defs(chosen_group) * chosen_group.num_of_defs, self.migration_rate_coops(chosen_group) * chosen_group.num_of_coops, self.migration_rate_defs * chosen_group.num_of_defs]
+            group_list_of_rates = [self.birth_rate_coops(chosen_group) * chosen_group.num_of_coops, self.birth_rate_defs(chosen_group) * chosen_group.num_of_defs, self.migration_rate_coops(chosen_group) * chosen_group.num_of_coops, self.migration_rate_defs(chosen_group) * chosen_group.num_of_defs]
 
             chosen_event = random.choices(['coop', 'def', 'migr_coop', 'migr_def'], group_list_of_rates)[0]
 
