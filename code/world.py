@@ -5,11 +5,12 @@ import pdb
 
 class World:
 
-    def __init__(self, initial_groups, W = 1, B = 1, R = 1, C = 1, eta = 0.01, mu = 0.01):
+    def __init__(self, initial_groups, W_1 = 1, W_2 = 1, B = 1, R = 1, C = 1, eta = 0.01, mu = 0.01):
         self.groups = initial_groups
         self.waiting_times = []
 
-        self.W = W
+        self.W_1 = W_1
+        self.W_2 = W_2
         self.B = B
         self.R = R
         self.C = C
@@ -27,8 +28,8 @@ class World:
     def payoff_defs(self, group):
         payoff = 0
         if group.size != 0:
-            payoff = 1 + min(1,self.B / group.size)  * group.num_of_coops  # This depends on the model
-        return payoff
+            payoff =  1 + min(1,self.B / group.size)  * group.num_of_coops  # This depends on the model
+        return 0
 
     def birth_rate_coops(self, group):
         rate = self.C * self.payoff_coops(group)  # This depends on the model
@@ -133,14 +134,16 @@ class World:
 
         list_of_rates = [self.birth_rate_coops(group) * group.num_of_coops  + self.birth_rate_defs(group) * group.num_of_defs + self.migration_rate_coops(group) * group.num_of_coops + self.migration_rate_coops(group) * group.num_of_coops for group in self.groups]
 
-        global_rate = sum(list_of_rates) + self.W
+        global_rate = self.W_1 * sum(list_of_rates) + self.W_2
 
         #pdb.set_trace()
 
         waiting_time_until_new_event = random.expovariate(global_rate)
         self.waiting_times.append(waiting_time_until_new_event)
 
-        event_level = random.choices([1,2], [sum(list_of_rates), self.W])[0]
+        event_level = random.choices([1,2], [self.W_1 * sum(list_of_rates), self.W_2])[0]
+
+        print(event_level)
 
         #pdb.set_trace()
 
