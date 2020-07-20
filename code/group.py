@@ -4,7 +4,7 @@ class Group:
 
     def __init__(self, initial_population):
         self.fonds = 0
-        self.members =
+        self.members = members
 
     def set_size(self, size):
         self.size = size
