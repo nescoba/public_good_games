@@ -29,7 +29,7 @@ class World:
         payoff = 0
         if group.size != 0:
             payoff =  1 + min(1,self.B / group.size)  * group.num_of_coops  # This depends on the model
-        return payoff 
+        return payoff
 
     def birth_rate_coops(self, group):
         rate = self.C * self.payoff_coops(group)  # This depends on the model
@@ -61,12 +61,12 @@ class World:
 
     def create_new_individual(self, group, level_of_coop):
         group.kill_random_member()
-
+        new_level_of_coop = level_of_coop
         there_is_mutation = random.choices([True,False], [self.eta, 1-self.eta])[0]
         if there_is_mutation:
-            level_of_coop = 1-level_of_coop
+            new_level_of_coop = 1-level_of_coop
 
-        new_individual = Individual(level_of_coop)
+        new_individual = Individual(new_level_of_coop)
 
         # there_is_migration = random.choices([1,0], [self.mu, 1-self.mu])[0]
         # if there_is_migration:
@@ -132,7 +132,7 @@ class World:
 
         #pdb.set_trace()
 
-        list_of_rates = [self.birth_rate_coops(group) * group.num_of_coops  + self.birth_rate_defs(group) * group.num_of_defs + self.migration_rate_coops(group) * group.num_of_coops + self.migration_rate_coops(group) * group.num_of_coops for group in self.groups]
+        list_of_rates = [self.birth_rate_coops(group) * group.num_of_coops  + self.birth_rate_defs(group) * group.num_of_defs + self.migration_rate_coops(group) * group.num_of_coops + self.migration_rate_defs(group) * group.num_of_defs for group in self.groups]
 
         global_rate = self.W_1 * sum(list_of_rates) + self.W_2
 
