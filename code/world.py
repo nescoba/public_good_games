@@ -29,7 +29,7 @@ class World:
         payoff = 0
         if group.size != 0:
             payoff =  1 + min(1,self.B / group.size)  * group.num_of_coops  # This depends on the model
-        return 0
+        return payoff 
 
     def birth_rate_coops(self, group):
         rate = self.C * self.payoff_coops(group)  # This depends on the model
