@@ -5,8 +5,8 @@ import pdb
 
 class World:
 
-    def __init__(self, initial_groups, W = 1, B = 1, R = 1, C = 1, eta = 0.01, mu = 0.01):
-        self.groups = initial_groups
+    def __init__(self, initial_population, W = 1, B = 1, R = 1, C = 1, eta = 0.01, mu = 0.01):
+        self.population = initial_population
         self.waiting_times = []
 
         self.W = W
@@ -16,31 +16,37 @@ class World:
         self.eta = eta
         self.mu = mu
 
-    def payoff_coops(self, group):
+    def update(self, group):
+        size  = 0
+        coops = 0
+        defs = 0
+
+        for individual in self.population:
+            if individual.group == group:
+                size += 1
+                if individual.coop_level == 1:
+                    coops += 1
+                elif individual.coop_level == 0:
+                    defs += 1
+
+        group.set_size(size)
+        group.set_num_of_coops(coops)
+        group.set_num_of_defs(defs)
+
+    def payoff(self, individual):
+        group = individual.group
         payoff = 0
-        if group.size != 0:
-            payoff = min(1,self.B / group.size)  * group.num_of_coops    # This depends on the model
+        if individual.coop_level == 1 :
+            payoff = min(1, self.B / group.size)  * group.num_of_coops
+        else
+            payoff = 1 + min(1, self.B / group.size)  * group.num_of_coops
         return payoff
 
-    def payoff_defs(self, group):
-        payoff = 0
-        if group.size != 0:
-            payoff = 1 + min(1,self.B / group.size)  * group.num_of_coops  # This depends on the model
-        return payoff
-
-    def birth_rate_coops(self, group):
-        rate = self.C * self.payoff_coops(group)  # This depends on the model
+    def birth_rate(self, individual):
+        rate = self.C * payoff(individual)  # This depends on the model
         return rate
 
-    def birth_rate_defs(self, group):
-        rate  = self.C * self.payoff_defs(group)   # This depends on the model
-        return rate
-
-    def migration_rate_coops(self, group):
-        rate = self.mu
-        return rate
-
-    def migration_rate_defs(self, group):
+    def migration_rate(self, individual):
         rate = self.mu
         return rate
 
