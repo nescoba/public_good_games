@@ -22,13 +22,13 @@ class World:
     def payoff_coops(self, group):
         payoff = 0
         if group.size != 0:
-            payoff = min(1,self.B / group.size)  * group.num_of_coops    # This depends on the model
+            payoff = (self.B / group.size)  * group.num_of_coops    # This depends on the model
         return payoff
 
     def payoff_defs(self, group):
         payoff = 0
         if group.size != 0:
-            payoff = 1+ min(1,self.B / group.size)  * group.num_of_coops  # This depends on the model
+            payoff = 1+(self.B / group.size)  * group.num_of_coops  # This depends on the model
         return payoff
 
     def birth_rate_coops(self, group):
