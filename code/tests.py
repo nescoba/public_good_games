@@ -74,18 +74,19 @@ if flag:
 #
 
 # Test 3
-single_individual =  Individual(1)
-initial_group = Group([single_individual],0)
-world = World([initial_group], eta = 1, mu = 0)
-flag = True
-i = 0
-while flag and i < 100 :
-     world.make_transition()
-     individual = world.groups[0].population[0]
-     if (i%2 == 0 and individual.coop_level == 1) or (i%1 == 1 and individual.coop_level == 0):
-         flag = False
-         print('test 3 failed')
-     i+=1
-
-if flag:
-    print('test 3 passed')
+# single_individual =  Individual(1)
+# initial_group = Group([single_individual],0)
+# world = World([initial_group], eta = 1, mu = 0)
+# flag = True
+# i = 0
+# while flag and i < 100 :
+     # world.make_transition()
+     # individual = world.groups[0].population[0]
+     # if (i%2 == 0 and individual.coop_level == 1) or (i%1 == 1 and individual.coop_level == 0):
+         # flag = False
+         # print('test 3 failed')
+     # i+=1
+#
+# if flag:
+    # print('test 3 passed')
+#

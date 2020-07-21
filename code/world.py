@@ -19,34 +19,34 @@ class World:
 
         self.population_size = sum([group.size for group in self.groups])
 
-    def payoff_coops(self, group):
+    def payoff(self, group, level_of_coop):
         payoff = 0
         if group.size != 0:
-            payoff = min(1,self.B / group.size)  * group.num_of_coops    # This depends on the model
+            payoff = 1 - level_of_coop + min(1,self.B / group.size)  * group.contributions    # This depends on the model
         return payoff
 
-    def payoff_defs(self, group):
-        payoff = 0
-        if group.size != 0:
-            payoff = 1+ min(1,self.B / group.size)  * group.num_of_coops  # This depends on the model
-        return payoff
-
-    def birth_rate_coops(self, group):
-        rate = self.C * self.payoff_coops(group)  # This depends on the model
+    # def payoff_defs(self, group):
+        # payoff = 0
+        # if group.size != 0:
+            # payoff = 1+ min(1,self.B / group.size)  * group.num_of_coops  # This depends on the model
+        # return payoff
+#
+    def birth_rate(self, group, level_of_coop):
+        rate = self.C * self.payoff(group, level_of_coop)  # This depends on the model
         return rate
-
-    def birth_rate_defs(self, group):
-        rate  = self.C * self.payoff_defs(group)   # This depends on the model
-        return rate
-
-    def migration_rate_coops(self, group):
+#
+    # def birth_rate_defs(self, group):
+        # rate  = self.C * self.payoff_defs(group)   # This depends on the model
+        # return rate
+#
+    def migration_rate(self, group):
         rate = self.mu
         return rate
-
-    def migration_rate_defs(self, group):
-        rate = self.mu
-        return rate
-
+#
+    # def migration_rate_defs(self, group):
+        # rate = self.mu
+        # return rate
+#
     # def second_level_rate(self, group):
         # rate = 0
         # list_of_non_empty_groups = []
@@ -83,7 +83,7 @@ class World:
         copy_of_groups = self.groups.copy()
         copy_of_groups.remove(chosen_group)
         list_of_sizes = [group.size for group in copy_of_groups]
-        second_chosen_group = random.choices(copy_of_groups, list_of_sizes)[0]
+        second_chosen_group = random.choice(copy_of_groups)
         return second_chosen_group
 
     def execute_group_level_dynamic(self):
@@ -106,16 +106,22 @@ class World:
         for group in self.groups:
             for individual in group.population:
                 target_group = group
-                if individual.coop_level == 1:
-                    there_is_migration = random.choices([True,False], [self.migration_rate_coops(group), 1-self.migration_rate_coops(group)])[0]
-                    if there_is_migration:
-                        target_group = self.select_different_group(group)
 
-                else:
-                    there_is_migration = random.choices([True,False], [self.migration_rate_defs(group), 1-self.migration_rate_defs(group)])[0]
-                    if there_is_migration:
-                        target_group = self.select_different_group(group)
+                there_is_migration = random.choices([True,False], [self.migration_rate(group), 1-self.migration_rate(group)])[0]
+                if there_is_migration:
+                    target_group = self.select_different_group(group)
 
+                #
+                # if individual.coop_level == 1:
+                    # there_is_migration = random.choices([True,False], [self.migration_rate(group), 1-self.migration_rate(group)])[0]
+                    # if there_is_migration:
+                        # target_group = self.select_different_group(group)
+#
+                # else:
+                    # there_is_migration = random.choices([True,False], [self.migration_rate_defs(group), 1-self.migration_rate_defs(group)])[0]
+                    # if there_is_migration:
+                        # target_group = self.select_different_group(group)
+#
                 j = 0
                 new_group = new_groups[0]
                 while new_group.id != target_group.id:
@@ -128,26 +134,38 @@ class World:
 
 
 
-        list_of_rates = [self.birth_rate_coops(group) * group.num_of_coops  + self.birth_rate_defs(group) * group.num_of_defs for group in self.groups]
+        #list_of_rates = [self.birth_rate_coops(group) * group.num_of_coops  + self.birth_rate_defs(group) * group.num_of_defs for group in self.groups]
+
+        list_of_rates = []
+        list_of_individuals = []
+
+        for group in self.groups:
+            for individual in group.population:
+                list_of_individuals.append([group, individual])
+                list_of_rates.append(self.birth_rate(group, individual.coop_level))
 
         new_groups = [Group([], group.id) for group in self.groups]
 
         for i in range(self.population_size):
-            chosen_group = random.choices(self.groups, list_of_rates)[0]
+            chosen_individual = random.choices(list_of_individuals, list_of_rates)[0]
 
-            group_list_of_rates = [self.birth_rate_coops(chosen_group) * chosen_group.num_of_coops, self.birth_rate_defs(chosen_group) * chosen_group.num_of_defs]
+            # group_list_of_rates = [self.birth_rate_coops(chosen_group) * chosen_group.num_of_coops, self.birth_rate_defs(chosen_group) * chosen_group.num_of_defs]
+#
+            # chosen_level_of_cooperation = random.choices([1, 0], group_list_of_rates)[0]
+#
+            perturbation = random.gauss(0,self.eta)
+            chosen_level_of_cooperation = chosen_individual[1].coop_level + perturbation
 
-            chosen_level_of_cooperation = random.choices([1, 0], group_list_of_rates)[0]
-
-            there_is_mutation = random.choices([True,False], [self.eta, 1-self.eta])[0]
-            if there_is_mutation:
-                chosen_level_of_cooperation = 1-chosen_level_of_cooperation
+            if chosen_level_of_cooperation < 0:
+                chosen_level_of_cooperation = 0
+            elif chosen_level_of_cooperation > 1:
+                chosen_level_of_cooperation = 1
 
             new_individual = Individual(chosen_level_of_cooperation)
 
             j = 0
             new_group = new_groups[0]
-            while new_group.id != chosen_group.id:
+            while new_group.id != chosen_individual[0].id:
                 j += 1
                 new_group = new_groups[j]
 
@@ -155,22 +173,22 @@ class World:
 
         self.groups = new_groups
 
-
-    def migrate_cooperator(self, chosen_group):
-        chosen_group.kill_random_cooperator()
-
-        new_individual = Individual(1)
-        second_chosen_group = self.select_different_group(chosen_group)
-        second_chosen_group.add_member(new_individual)
-
-
-    def migrate_defector(self, chosen_group):
-        chosen_group.kill_random_defector()
-
-        new_individual = Individual(0)
-        second_chosen_group = self.select_different_group(chosen_group)
-        second_chosen_group.add_member(new_individual)
-
+#
+    # def migrate_cooperator(self, chosen_group):
+        # chosen_group.kill_random_cooperator()
+#
+        # new_individual = Individual(1)
+        # second_chosen_group = self.select_different_group(chosen_group)
+        # second_chosen_group.add_member(new_individual)
+#
+#
+    # def migrate_defector(self, chosen_group):
+        # chosen_group.kill_random_defector()
+#
+        # new_individual = Individual(0)
+        # second_chosen_group = self.select_different_group(chosen_group)
+        # second_chosen_group.add_member(new_individual)
+#
 
     def make_transition(self):
 

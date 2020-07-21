@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 M = 10
 n = 100
-TIME = 2000
+TIME = 500
 
 
 initial_groups = []
@@ -16,7 +16,7 @@ for m in range(M):
     group = Group([],m)
 
     for k in range(n):
-        new_level_of_coop = random.choice([1,0])
+        new_level_of_coop = random.uniform(0,1)
         new_individual = Individual(new_level_of_coop)
         group.add_member(new_individual)
 
@@ -45,7 +45,7 @@ while time < TIME:
         selected_group = world.groups[k]
 
     if selected_group.size != 0:
-        avg_contribution = selected_group.num_of_coops/selected_group.size
+        avg_contribution = selected_group.contributions/selected_group.size
     avg_contr_series.append(avg_contribution)
     group_population_series.append(selected_group.size)
     time_series.append(time)

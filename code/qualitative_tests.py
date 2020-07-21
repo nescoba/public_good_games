@@ -54,7 +54,7 @@ world = World([group], eta = 0, mu = 0)
 for step in range(steps):
     world.make_transition()
 
-coops = world.groups[0].num_of_coops
-defs = world.groups[0].num_of_defs
+coops = world.groups[0].contributions
+#defs = world.groups[0].num_of_defs
 
-print(f'There are {coops} cooperators and {defs} defectors')
+print(f'The contributions are  {coops} ')
