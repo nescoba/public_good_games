@@ -5,9 +5,9 @@ import random
 import numpy as np
 import matplotlib.pyplot as plt
 
-M = 2
+M = 10
 n = 100
-TIME = 1
+TIME = 2000
 
 
 initial_groups = []
@@ -22,7 +22,7 @@ for m in range(M):
 
     initial_groups.append(group)
 
-world = World(initial_groups, eta = 0.006, mu = 0.006, B = 1000, W_2 = 10)
+world = World(initial_groups, eta = 0.006, mu = 0.006, B = 10)
 
 avg_contr_series = []
 group_population_series = []
@@ -46,7 +46,7 @@ while time < TIME:
 
     if selected_group.size != 0:
         avg_contribution = selected_group.num_of_coops/selected_group.size
-    avg_contr_series.append(selected_group.num_of_coops)
+    avg_contr_series.append(avg_contribution)
     group_population_series.append(selected_group.size)
     time_series.append(time)
 

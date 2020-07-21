@@ -19,15 +19,21 @@ for i in range(n):
     def_individual = Individual(0)
     group_defs.add_member(def_individual)
 
-world = World([group_coops, group_defs], eta = 0, mu = 0, W = 100 )
+world = World([group_coops, group_defs], eta = 0, mu = 0 )
 
 for step in range(steps):
     world.make_transition()
 
-size_1 = world.groups[0].size
-size_2 = world.groups[1].size
+group_coops = world.groups[0]
+group_defs = world.groups[1]
+if group_coops.id != 1:
+    group_coops = world.groups[1]
+    group_defs = world.groups[0]
 
-print(f'The group of cooperators has {size_1} members, the one of defectors has {size_2}')
+size_coops = group_coops.size
+size_defs = group_defs.size
+
+print(f'The group of cooperators has {size_coops} members, the one of defectors has {size_defs}')
 
 
 # Test 2

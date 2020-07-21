@@ -20,10 +20,10 @@ while flag and i < 100:
         flag = False
         print('test 1 failed')
     i += 1
-
+#
 if flag:
     print('test 1 passed')
-
+#
 
 # Test 2
 # single_individual = Individual(1)
@@ -46,31 +46,37 @@ if flag:
     # print('test 2 passed')
 #
 
-# Test 3
+# Test 2
 single_individual = Individual(1)
-initial_group_1 = Group([single_individual], 0)
-initial_group_2 = Group([], 1)
-world = World([initial_group_1, initial_group_2], eta = 0, mu = 1000000,W = 0)
+initial_group_0 = Group([single_individual], 0)
+initial_group_1 = Group([], 1)
+world = World([initial_group_0, initial_group_1], eta = 0, mu = 1)
 flag = True
 i = 0
 while flag and i < 100:
-    #pdb.set_trace()
     world.make_transition()
-    size_1 = world.groups[0].size
-    size_2 = world.groups[1].size
-    if (i%2 == 0 and size_1 != 0) or (i%2 == 1 and size_2 != 0):
+    group_0 = world.groups[0]
+    group_1 = world.groups[1]
+    if group_0.id != 0:
+        group_0 = world.groups[1]
+        group_1 = world.groups[0]
+#
+    size_0 = group_0.size
+    size_1 = group_1.size
+    #pdb.set_trace()
+    if (i%2 == 0 and size_0 != 0) or (i%2 == 1 and size_1 != 0):
         flag = False
         print('test 2 failed')
     i += 1
 #
 if flag:
     print('test 2 passed')
-
+#
 
 # Test 3
 single_individual =  Individual(1)
 initial_group = Group([single_individual],0)
-world = World([initial_group], eta = 1, mu = 0, W = 0)
+world = World([initial_group], eta = 1, mu = 0)
 flag = True
 i = 0
 while flag and i < 100 :
