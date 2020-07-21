@@ -28,7 +28,7 @@ class World:
     def payoff_defs(self, group):
         payoff = 0
         if group.size != 0:
-            payoff =  1 + min(1,self.B / group.size)  * group.num_of_coops  # This depends on the model
+            payoff =  min(1,self.B / group.size)  * group.num_of_coops  # This depends on the model
         return payoff
 
     def birth_rate_coops(self, group):
@@ -143,7 +143,7 @@ class World:
 
         event_level = random.choices([1,2], [self.W_1 * sum(list_of_rates), self.W_2])[0]
 
-        print(event_level)
+        #print(event_level)
 
         #pdb.set_trace()
 
