@@ -83,7 +83,7 @@ class World:
         copy_of_groups = self.groups.copy()
         copy_of_groups.remove(chosen_group)
         list_of_sizes = [group.size for group in copy_of_groups]
-        second_chosen_group = random.choices(copy_of_groups, list_of_sizes)[0]
+        second_chosen_group = random.choice(copy_of_groups)
         return second_chosen_group
 
     def execute_group_level_dynamic(self):
