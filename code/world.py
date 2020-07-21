@@ -76,16 +76,22 @@ class World:
 #
         group.add_member(new_individual)
 
-    def select_different_group(self, chosen_group):
+    def select_different_group_proportional(self, chosen_group):
         copy_of_groups = self.groups.copy()
         copy_of_groups.remove(chosen_group)
         list_of_sizes = [group.size for group in copy_of_groups]
         second_chosen_group = random.choices(copy_of_groups, list_of_sizes)[0]
         return second_chosen_group
 
+    def select_different_group(self, chosen_group):
+        copy_of_groups = self.groups.copy()
+        copy_of_groups.remove(chosen_group)
+        second_chosen_group = random.choice(copy_of_groups)
+        return second_chosen_group
+
     def execute_group_level_dynamic(self, chosen_group):
 
-        second_chosen_group = self.select_different_group(chosen_group)
+        second_chosen_group = self.select_different_group_proportional(chosen_group)
         second_chosen_group.kill_random_member()
 
         chosen_level_of_coop = random.choices([1,0], [chosen_group.num_of_coops , chosen_group.num_of_defs ])[0]
