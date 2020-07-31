@@ -6,7 +6,7 @@ import pdb
 
 
 # Test 1
-single_individual = Individual(1)
+single_individual = Individual(1, 0)
 initial_group = Group([single_individual],0)
 world = World([initial_group], eta = 0, mu = 0)
 flag = True
@@ -47,10 +47,10 @@ if flag:
 #
 
 # Test 2
-single_individual = Individual(1)
+single_individual = Individual(1, 1)
 initial_group_0 = Group([single_individual], 0)
 initial_group_1 = Group([], 1)
-world = World([initial_group_0, initial_group_1], eta = 0, mu = 1)
+world = World([initial_group_0, initial_group_1], eta = 0, mu = 0)
 flag = True
 i = 0
 while flag and i < 100:

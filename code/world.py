@@ -39,9 +39,11 @@ class World:
         # rate  = self.C * self.payoff_defs(group)   # This depends on the model
         # return rate
 #
-    def migration_rate(self, group):
-        rate = self.mu
-        return rate
+#
+    # def migration_rate(self, group):
+        # rate = self.mu
+        # return rate
+#
 #
     # def migration_rate_defs(self, group):
         # rate = self.mu
@@ -107,7 +109,7 @@ class World:
             for individual in group.population:
                 target_group = group
 
-                there_is_migration = random.choices([True,False], [self.migration_rate(group), 1-self.migration_rate(group)])[0]
+                there_is_migration = random.choices([True,False], [individual.migr_level, 1-individual.migr_level])[0]
                 if there_is_migration:
                     target_group = self.select_different_group(group)
 
@@ -161,7 +163,17 @@ class World:
             elif chosen_level_of_cooperation > 1:
                 chosen_level_of_cooperation = 1
 
-            new_individual = Individual(chosen_level_of_cooperation)
+
+            migr_perturbation = random.gauss(0,self.mu)
+            chosen_level_of_migration = chosen_individual[1].migr_level + migr_perturbation
+
+            if chosen_level_of_migration < 0:
+                chosen_level_of_migration = 0
+            elif chosen_level_of_migration > 1:
+                chosen_level_of_migration = 1
+
+
+            new_individual = Individual(chosen_level_of_cooperation, chosen_level_of_migration)
 
             j = 0
             new_group = new_groups[0]

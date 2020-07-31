@@ -13,10 +13,10 @@ group_coops = Group([],1)
 group_defs = Group([],0)
 
 for i in range(n):
-    coop_individual = Individual(1)
+    coop_individual = Individual(1, 0)
     group_coops.add_member(coop_individual)
 
-    def_individual = Individual(0)
+    def_individual = Individual(0, 0)
     group_defs.add_member(def_individual)
 
 world = World([group_coops, group_defs], eta = 0, mu = 0 )
@@ -43,11 +43,11 @@ steps = 100
 
 group = Group([],0)
 for i in range(n):
-    coop_individual = Individual(1)
+    coop_individual = Individual(1, 0)
     group.add_member(coop_individual)
 
 for i in range(n//3):
-    selfish_individual = Individual(0)
+    selfish_individual = Individual(0, 0)
     group.add_member(selfish_individual)
 
 world = World([group], eta = 0, mu = 0)
