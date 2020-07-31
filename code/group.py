@@ -6,6 +6,7 @@ class Group:
         self.population = initial_population
         self.size = 0
         self.contributions = 0
+        self.migr_levels = 0
         #self.num_of_coops = 0
         #self.num_of_defs = 0
         self.id = id
@@ -14,7 +15,9 @@ class Group:
     def update(self):
         self.size = len(self.population)
         coop_levels = [individual.coop_level for individual in self.population]
+        migr_levels = [individual.migr_level for individual in self.population]
         self.contributions = sum(coop_levels)
+        self.migr_levels = sum(migr_levels)
 
     def add_member(self, individual):
         self.population.append(individual)

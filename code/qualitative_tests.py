@@ -19,7 +19,7 @@ for i in range(n):
     def_individual = Individual(0, 0)
     group_defs.add_member(def_individual)
 
-world = World([group_coops, group_defs], eta = 0, mu = 0 )
+world = World([group_coops, group_defs], B = 2, eta = 0, mu = 0 )
 
 for step in range(steps):
     world.make_transition()
