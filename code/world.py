@@ -1,11 +1,12 @@
 import random
-from group import *
-from individual import *
+from groups_code import *
+from individuals_code import *
 import pdb
 
 class World:
 
-    def __init__(self, initial_groups, W=1, B = 1, R = 1, C = 1, eta = 0.01, mu = 0.01):
+    def __init__(self, initial_groups, W=1, B = 1, R = 1, C = 1, 
+                 eta = 0.01, mu = 0.01):
         self.groups = initial_groups
         self.waiting_times = []
 
@@ -22,7 +23,8 @@ class World:
     def payoff(self, group, level_of_coop):
         payoff = 0
         if group.size != 0:
-            payoff = 1 - level_of_coop + min(1,self.B / group.size)  * group.contributions    # This depends on the model
+            payoff = 1 - level_of_coop 
+            + min(1,self.B / group.size)  * group.contributions    # This depends on the model
         return payoff
 
     # def payoff_defs(self, group):
@@ -109,7 +111,9 @@ class World:
             for individual in group.population:
                 target_group = group
 
-                there_is_migration = random.choices([True,False], [individual.migr_level, 1-individual.migr_level])[0]
+                there_is_migration = random.choices([True,False], 
+                                                    [individual.migr_level, 
+                                                     1-individual.migr_level])[0]
                 if there_is_migration:
                     target_group = self.select_different_group(group)
 

@@ -1,5 +1,4 @@
-import random
-from individual import *
+from individuals_code import *
 class Group:
 
     def __init__(self, initial_population, id):
