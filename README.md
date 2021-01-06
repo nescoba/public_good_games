@@ -1,1 +1,1 @@
-# public_good_games
+# Public Good Games
